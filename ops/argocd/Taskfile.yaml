@@ -1,0 +1,39 @@
+version: "3"
+
+tasks:
+  create-argocd:
+    desc: "Create ArgoCD in `argocd` namespace"
+    cmds:
+      - kubectx kind-kind
+      - kubectl create namespace argocd
+      - kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      # - kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+  install-argocd-cli:
+    desc: "Install ArgoCD CLI"
+    cmds:
+      - brew install argocd
+
+  init-argocd-password:
+    desc: "Login to ArgoCD"
+    cmds:
+      - argocd admin initial-password -n argocd
+      # JU0uiJ4fPOYvSgll
+
+  login-argocd:
+    desc: "Login to ArgoCD"
+    cmds:
+      - argocd login localhost:8080 --username admin --password JU0uiJ4fPOYvSgll --insecure
+
+  # create argocd in gke_son-devops_asia-southeast1_son-devops cluster first
+  add-remote-cluster:
+    desc: "Add remote cluster"
+    cmds:
+      - |
+        argocd cluster add gke_son-devops_asia-southeast1_son-devops --system-namespace argocd
+        argocd cluster list
+
+  create-argocd-app:
+    desc: "Create ArgoCD application"
+    cmds:
+      - kubectl apply -f application.yaml

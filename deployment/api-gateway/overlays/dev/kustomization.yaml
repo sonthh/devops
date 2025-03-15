@@ -1,0 +1,8 @@
+namespace: dev
+
+resources:
+  - ../../base
+
+images:
+  - name: sonthh98/api-gateway
+    newTag: 3a8c160b665e1fb5b7a0d366494823b179a749bb

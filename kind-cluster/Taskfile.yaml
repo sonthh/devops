@@ -1,0 +1,21 @@
+version: "3"
+
+env:
+  NAMESPACE: dev
+
+tasks:
+  create-cluster:
+    cmds:
+      - kind create cluster --config kind-config.yaml
+    desc: Create a Kubernetes cluster using kind
+
+  create-namespace:
+    desc: "Create a namespace set as default"
+    cmds:
+      - kubectl apply -f Namespace.yaml
+      - kubens ${NAMESPACE}
+
+  delete-cluster:
+    cmds:
+      - kind delete cluster
+    desc: Delete and existing a kind Kubernetes cluster

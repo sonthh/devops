@@ -1,0 +1,39 @@
+version: "3"
+
+env:
+  NAMESPACE: postgres
+
+tasks:
+  create-namespace:
+    desc: "Create a namespace set as default"
+    cmds:
+      - kubectl apply -f Namespace.yaml
+      - kubens ${NAMESPACE}
+
+  install-helm:
+    desc: Install Helm if not installed
+    cmds:
+      - |
+        if ! command -v helm &> /dev/null; then
+          echo "Installing Helm..."
+          curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        else
+          echo "Helm is already installed"
+        fi
+
+  install-postgres:
+    desc: Install PostgreSQL using Helm in `postgres` namespace
+    cmds:
+      - |
+        helm install ${NAMESPACE} bitnami/postgresql \
+          --namespace postgres \
+          --set global.postgresql.auth.username=devops \
+          --set global.postgresql.auth.password=changeme \
+          --set global.postgresql.auth.database=userdb \
+          --set primary.service.port=5432 \
+          --set primary.persistence.enabled=false
+
+  create-env-secret:
+    desc: Create env secret
+    cmds:
+      - kubectl apply -f env-secret.yaml
