@@ -3,8 +3,8 @@ kind: Kustomization
 namespace: dev
 
 resources:
-  - ../../base
+- ../../base
 
 images:
-  - name: sonthh98/user-api
-    newTag: latest
+- name: sonthh98/user-api
+  newTag: d3df0fe2b5de81841a546f3264564e2ca065ddab
