@@ -1,0 +1,29 @@
+version: "3"
+
+env:
+  API_KEY: <your_api_key>
+
+tasks:
+  create-namespace:
+    desc: Create the Datadog namespace
+    cmds:
+      - kubectl apply -f Namespace.yaml
+      - kubens datadog
+
+  install-agent:
+    desc: Install the Datadog agent
+    cmds:
+      - helm repo add datadog https://helm.datadoghq.com
+      - helm repo update
+      - kubectl create secret generic datadog-secret --from-literal api-key=${API_KEY}
+      - helm install datadog-agent -f datadog-values.yaml datadog/datadog
+      # reapplying if got error
+      - helm upgrade datadog-agent -f datadog-values.yaml datadog/datadog
+
+  uninstall-agent:
+    desc: Uninstall the Datadog agent
+    cmds:
+      - helm uninstall datadog-agent
+      - kubectl delete secret datadog-secret
+      - kubens default
+      - kubectl delete namespace datadog

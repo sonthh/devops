@@ -1,0 +1,39 @@
+datadog:
+  site: "us5.datadoghq.com"
+  apiKeyExistingSecret: "datadog-secret"
+
+  # ✅ Disable hostPID to comply with GKE Autopilot
+  security:
+    hostPID: false
+
+  # ✅ Disable features that require restricted hostPath mounts
+  logs:
+    enabled: false
+  apm:
+    enabled: false
+  processAgent:
+    enabled: false
+  systemProbe:
+    enabled: false
+
+  # ✅ Reduce resource usage for GKE Free Tier
+  resources:
+    requests:
+      cpu: 50m # Reduce CPU request to 50 millicores
+      memory: 128Mi # Reduce memory request to 128 MiB
+    limits:
+      cpu: 200m # Set a low CPU limit
+      memory: 256Mi # Set a low memory limit
+
+clusterAgent:
+  enabled: false # ❌ Disable to reduce API calls & resource usage
+
+# https://github.com/DataDog/helm-charts/issues/549#issuecomment-1405540019
+providers:
+  gke:
+    autopilot: true
+
+# issue: 0/2 nodes are available: 1 node(s) had untolerated taint {autoscaling.gke.io/defrag-candidate: 1742459630}. preemption: 0/2 nodes are available: 2 Preemption is not helpful for scheduling.
+tolerations:
+  - key: "autoscaling.gke.io/defrag-candidate"
+    operator: "Exists"
