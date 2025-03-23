@@ -3,8 +3,8 @@ kind: Kustomization
 namespace: dev
 
 resources:
-  - ../../base
+- ../../base
 
 images:
-  - name: sonthh98/api-gateway
-    newTag: 599c2273cb709734e9fb189fc1a2ba5b8546a575
+- name: sonthh98/api-gateway
+  newTag: e2211edca3cd208dfaf4c7e6028e1f8c3d32cd43
