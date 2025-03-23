@@ -11,6 +11,7 @@ on:
         options:
           - "api-gateway"
           - "user-api"
+          - "frontend"
 
 jobs:
   build:
@@ -59,6 +60,7 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add .
           git commit -m "Update kustomize image to ${{ secrets.DOCKER_USERNAME }}/${{ inputs.service }}:${{ github.sha }}"
-          git push
+          git pull origin main --rebase
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
