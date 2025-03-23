@@ -4,8 +4,10 @@ metadata:
   name: devops-ingress
   annotations:
     kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "api-tuanhung-ssl"
 spec:
   rules:
+    # Access via IP
     - http:
         paths:
           - path: /api
@@ -15,3 +17,17 @@ spec:
                 name: api-gateway
                 port:
                   number: 80
+    # Access via domain
+    - host: tuanhung.xyz
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - tuanhung.xyz
