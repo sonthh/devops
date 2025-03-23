@@ -3,8 +3,10 @@ kind: Kustomization
 namespace: dev
 
 resources:
-  - ../../base
+- ../../base
 
 images:
-  - name: sonthh98/devops-frontend
-    newTag: latest
+- name: sonthh98/devops-frontend
+  newTag: latest
+- name: sonthh98/frontend
+  newTag: 95f8d425ad28cd3a6dde5ce835cb0e37be6e33a2
